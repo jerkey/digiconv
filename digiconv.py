@@ -53,14 +53,19 @@ def normalize_ESR(s):
         return (float(s.split(" ")[0]) * 1000)
     return s
 
-inFile = open('digikeyultracaps.csv','r')
+inFile = open('digikeyultracaps500.csv','r')
 inRows = csv.reader(inFile, delimiter=',', quotechar='"')
 outFile = csv.writer(sys.stdout, delimiter=',', quotechar='"')
 for row in inRows:
+    dim1 = extract_paren(row[22]).split(" ")[0]
+    if len(extract_paren(row[22]).split(" ")) > 2:
+        dim2 = extract_paren(row[22]).split(" ")[2]
+    else:
+        dim2 = dim1
     stuff = ( row[0], row[2], row[3], row[5], row[6], row[8], # row[8] is price
               row[10], normalize_capacitance(row[13]),
               normalize_voltage(row[15]), normalize_ESR(row[16]),
-              extract_paren(row[22]).split("mm")[0],
-              extract_paren(row[22]).split("x")[1],
+              dim1.split("mm")[0],
+              dim2.split("mm")[0],
               extract_paren(row[23].split("mm")[0]) )
     outFile.writerow(stuff)
