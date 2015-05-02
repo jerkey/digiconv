@@ -60,5 +60,7 @@ for row in inRows:
     stuff = ( row[0], row[2], row[3], row[5], row[6], row[8], # row[8] is price
               row[10], normalize_capacitance(row[13]),
               normalize_voltage(row[15]), normalize_ESR(row[16]),
-              extract_paren(row[21]), extract_paren(row[22]), extract_paren(row[23]) )
+              extract_paren(row[22]).split("mm")[0],
+              extract_paren(row[22]).split("x")[1],
+              extract_paren(row[23].split("mm")[0]) )
     outFile.writerow(stuff)
