@@ -41,16 +41,24 @@ def normalize_capacitance(s):
         return "%.3f" % (float(s[0:-2]) * 0.001)
     return s[0:-1]
 
-f = open('digikey.csv','r')
-r = csv.reader(f, delimiter=',', quotechar='"')
-w = csv.writer(sys.stdout, delimiter=',', quotechar='"')
-for row in r:
-    out = ""
-    idx = 0
-    stuff = ( row[0], row[2], row[3], row[5],
-              row[8], row[10], normalize_capacitance(row[13]),
-              row[15], row[16], extract_paren(row[21]),
-              extract_paren(row[22]), extract_paren(row[23]) )
-    w.writerow(stuff)
-            
+def normalize_voltage(s):
+    if s[-1] != 'V':
+        return s
+    return s[0:-1]
 
+def normalize_ESR(s):
+    if s.find("mOhm") > 0:
+        return s.split(" ")[0]
+    if s.find("Ohm") > 0:
+        return (float(s.split(" ")[0]) * 1000)
+    return s
+
+inFile = open('digikeyultracaps.csv','r')
+inRows = csv.reader(inFile, delimiter=',', quotechar='"')
+outFile = csv.writer(sys.stdout, delimiter=',', quotechar='"')
+for row in inRows:
+    stuff = ( row[0], row[2], row[3], row[5], row[6], row[8], # row[8] is price
+              row[10], normalize_capacitance(row[13]),
+              normalize_voltage(row[15]), normalize_ESR(row[16]),
+              extract_paren(row[21]), extract_paren(row[22]), extract_paren(row[23]) )
+    outFile.writerow(stuff)
