@@ -38,7 +38,7 @@ def normalize_capacitance(s):
     if s[-1] != 'F':
         return s
     if s[-2] == 'm':
-        return "%.3f" % (float(s[0:-2]) * 0.001)
+        return "%.6f" % (float(s[0:-2]) * 0.001)
     return s[0:-1]
 
 def normalize_voltage(s):
